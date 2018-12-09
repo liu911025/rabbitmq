@@ -25,10 +25,13 @@ public class RabbitProducer {
         factory.setPort(PORT);
         factory.setUsername("root");
         factory.setPassword("root");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+        Connection connection = factory.newConnection(); //创建连接
+        Channel channel = connection.createChannel();   //创建信道
+        //创建一个type="direct",持久化,非自动删除的交换器
         channel.exchangeDeclare(EXCHANGE_NAME, "direct", true, false, null);
+        //创建一个持久化,非排它的,非自动删除的队列
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        //将队列和交换机绑定
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
         String msg = "hello";
         channel.basicPublish(EXCHANGE_NAME, ROUTING_KEY, MessageProperties.PERSISTENT_TEXT_PLAIN, msg.getBytes());

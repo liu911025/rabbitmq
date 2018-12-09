@@ -20,9 +20,9 @@ public class RabbitConsumer {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername("root");
         factory.setPassword("root");
-        Connection connection = factory.newConnection(addresses);
-        final Channel channel = connection.createChannel();
-        channel.basicQos(64);
+        Connection connection = factory.newConnection(addresses); //创建连接
+        final Channel channel = connection.createChannel(); //创建信道
+        channel.basicQos(64);   //设置客户端最多接收未被ack的消息个数
         Consumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
